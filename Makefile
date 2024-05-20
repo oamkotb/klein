@@ -1,2 +1,2 @@
 klein: klein.cc
-	g++ klein.cc -o klein -Wall -Wextra -pedantic -std=c++17
+	g++ *.cc -o klein -Wall -Wextra -pedantic -std=c++17
