@@ -1,0 +1,1 @@
+A basic command line text editor written in Go.
