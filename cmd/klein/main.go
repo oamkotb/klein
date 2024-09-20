@@ -1,14 +1,14 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"log"
 	"os"
-	"unicode"
 
+	e "github.com/oamkotb/klein/internal/editor"
 	"golang.org/x/term"
 )
+
+/** terminal **/
 
 var orig_state *term.State
 
@@ -29,22 +29,27 @@ func enableRawMode() {
 	orig_state = old_state
 }
 
+/** input **/
+
+/** init **/
+
 func main() {
 	enableRawMode()
 	defer disableRawMode()
 
-	reader := bufio.NewReader(os.Stdin)
+	var editor e.Editor
+
+	err := editor.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for {
-		// Read one byte from os.Stdin
-		r, _, err := reader.ReadRune()
-		if err != nil || r == 'q' {
+		editor.RefreshScreen()
+		editor.DrawRows()
+		if editor.ProcessKeypress() {
 			break
 		}
-
-		if unicode.IsControl(r) {
-			fmt.Printf("%d\r\n", r)
-		} else {
-			fmt.Printf("%d ('%c')\r\n", r, r)
-		}
 	}
+	editor.RefreshScreen()
 }
